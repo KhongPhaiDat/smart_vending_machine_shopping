@@ -84,8 +84,8 @@ def insert_amount_item():
         item_new_quantity[item] = get_new_quantity(item)
 
 
-# Show total price of shopping
-def show_total_price():
+# Calculate total price
+def calculate_total_price():
     total_price = 0
 
     for item, new_quantity in item_new_quantity.items():
@@ -93,6 +93,12 @@ def show_total_price():
             machine_info["items"][item]["price"]
         )
 
+    return total_price
+
+
+# Show total price of shopping
+def show_total_price():
+    total_price = calculate_total_price()
     st.write("Total Price: ", total_price)
 
 
