@@ -35,9 +35,13 @@ def main():
 
 # Show info of item
 def show_items(name_item, info_item):
-    st.write("Provide information about item")
+    st.write(name_item)
+
+    amount = info_item["amount"]
+    st.write("Quantity remaining: ", amount)
 
 
+# User input quantity of item
 def get_new_quantity(name_item):
     new_quantity = st.number_input(
         "Input your quantity: ",
