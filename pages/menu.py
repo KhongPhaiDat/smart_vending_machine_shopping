@@ -1,8 +1,11 @@
 import streamlit as st
-import menu_component
+
+import modules.menu_component as menu_component
+
 
 # Init menu component
 menu_component = menu_component.MenuComponent()
+
 
 # Get id of machine from url param
 id = st.experimental_get_query_params()["id"][0]
@@ -15,7 +18,7 @@ item_new_quantity = dict()
 
 # # Just for testing to display
 # machine_info = {
-#     "ID": "123456",
+#     "id": "123456",
 #     "items": {
 #         "milk": {"amount": 7, "price": 10},
 #         "coke": {"amount": 9, "price": 10},
@@ -89,5 +92,9 @@ def show_total_price():
     st.write("Total Price: ", total_price)
 
 
-if __name__ == "__main__":
-    main()
+def confirm():
+    st.button("Go to Cart!!!")
+
+
+# if __name__ == "__main__":
+#     main()

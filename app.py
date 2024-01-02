@@ -1,3 +1,6 @@
 import streamlit as st
 
-st.title("Smart Vending Shopping")
+import pages.menu as menu
+
+# Menu
+menu.main()

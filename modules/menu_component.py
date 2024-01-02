@@ -3,8 +3,7 @@ import boto3
 
 class MenuComponent:
     def __init__(self) -> None:
-        self.dyn_resource = boto3.resource(
-            "dynamodb", region_name='ap-northeast-1')
+        self.dyn_resource = boto3.resource("dynamodb", region_name="ap-northeast-1")
         self.menu_table = self.dyn_resource.Table("Menu_database")
 
     def queryMenuByMachineIDFromDatabase(self, id):
