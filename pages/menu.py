@@ -1,22 +1,29 @@
 import streamlit as st
+import menu_component
+
+# Init menu component
+menu_component = menu_component.MenuComponent()
+
+# Get id of machine from url param
+id = st.experimental_get_query_params()["id"][0]
 
 # Get machine info base on ID
-machine_info = dict()
+machine_info = menu_component.returnMenuByMachineID(id=id)
 
 # Get item new quantity
 item_new_quantity = dict()
 
-# Just for testing to display
-machine_info = {
-    "ID": "123456",
-    "items": {
-        "milk": {"amount": 7, "price": 10},
-        "coke": {"amount": 9, "price": 10},
-        "water": {"amount": 20, "price": 10},
-        "doll": {"amount": 10, "price": 10},
-        "pencil": {"amount": 10, "price": 10},
-    },
-}
+# # Just for testing to display
+# machine_info = {
+#     "ID": "123456",
+#     "items": {
+#         "milk": {"amount": 7, "price": 10},
+#         "coke": {"amount": 9, "price": 10},
+#         "water": {"amount": 20, "price": 10},
+#         "doll": {"amount": 10, "price": 10},
+#         "pencil": {"amount": 10, "price": 10},
+#     },
+# }
 
 
 # Main structure of menu page
@@ -53,7 +60,7 @@ def get_new_quantity(name_item):
         "Input your quantity: ",
         key=name_item,
         min_value=0,
-        max_value=machine_info["items"][name_item]["amount"],
+        max_value=int(machine_info["items"][name_item]["amount"]),
         step=1,
     )
     return new_quantity
