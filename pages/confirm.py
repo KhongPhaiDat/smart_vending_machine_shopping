@@ -27,6 +27,8 @@ def show_item_info():
     machine_info = menu.machine_info
 
     for item, amount in show_items.items():
+        if float(amount) == 0.0:
+            continue
         data["Item"].append(str(item))
         data["Quantity"].append(str(amount))
         data["Price Per Item"].append(str(machine_info["items"][item]["price"]))
