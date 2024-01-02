@@ -36,6 +36,7 @@ def main():
 # Show info of item
 def show_items(name_item, info_item):
     st.write("Provide information about item")
+    st.write("Suka Blyat!!!")
 
 
 def get_new_quantity(name_item):
