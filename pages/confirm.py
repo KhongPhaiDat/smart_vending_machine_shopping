@@ -16,7 +16,7 @@ def main():
 
 
 def show_item_info():
-    st.write("Your Cart!")
+    st.write("Review Your Cart")
 
     data = dict()
     data["Item"] = list()
@@ -33,6 +33,7 @@ def show_item_info():
 
     df = pd.DataFrame(data)
     st.write(df)
+    st.write("Total Price: ", menu.calculate_total_price())
 
 
 def cancel_cart():
