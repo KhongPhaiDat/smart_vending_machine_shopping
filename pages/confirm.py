@@ -6,13 +6,14 @@ import pandas as pd
 
 def main():
     # Show items info in cart
-    show_item_info()
+
+    can_confirm = show_item_info()
 
     # Cancel cart and navigate to menu
     cancel_cart()
 
     # Confirm cart and go to payment page
-    payment_cart()
+    payment_cart(can_confirm)
 
 
 def show_item_info():
@@ -37,15 +38,23 @@ def show_item_info():
     st.write(df)
     st.write("Total Price: ", menu.calculate_total_price())
 
+    if len(data["Item"]) == 0:
+        return 0
+
+    return 1
+
 
 def cancel_cart():
     if st.button("CANCEL"):
         switch_page("app")
 
 
-def payment_cart():
-    if st.button("CONFIRM"):
-        switch_page("payment_page")
+def payment_cart(can_confirm):
+    if can_confirm == True:
+        if st.button("CONFIRM"):
+            switch_page("payment_page")
+    else:
+        st.write("Please GO BACK and choose your quantity!")
 
 
 if __name__ == "__main__":
