@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 ExecStart=/home/ec2-user/.local/bin/streamlit run /home/ec2-user/smart_vending_machine_shopping/app.py
-WorkingDirectory=/home/ec2-user/vending_machine_management_web
+WorkingDirectory=/home/ec2-user/smart_vending_machine_shopping
 Restart=always
 User=ec2-user
 
