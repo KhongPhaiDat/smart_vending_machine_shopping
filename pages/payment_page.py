@@ -33,9 +33,16 @@ def show_pay_button():
             st.write("Chọn đi thằng ml")
 
 
+# Show cancel button
+def show_cancel_button():
+    if st.button("Cancel"):
+        switch_page("app")
+
+
 def main():
     show_total_price()
     show_pay_button()
+    show_cancel_button()
 
 
 if __name__ == "__main__":
