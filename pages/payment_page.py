@@ -7,3 +7,9 @@ st.write("Total Price: ", menu.calculate_total_price())
 
 # Show payment method
 st.write("Please choose your payment method!")
+
+choose = st.button("Ngân Lượng Wallet")
+
+if choose:
+    if st.button("Pay"):
+        st.write("haha")
