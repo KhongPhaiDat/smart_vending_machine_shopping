@@ -105,7 +105,7 @@ def create_order():
 
 
 def redirect_new_page(url):
-    webbrowser.open(url, new=0)
+    webbrowser.open(url, new=1)
 
 
 # Show pay button
@@ -118,8 +118,10 @@ def show_pay_button():
     if st.button("Pay"):
         if chosen_method == "VN Pay":
             url = create_order()
+            st.write(url)
             redirect_new_page(url)
-            switch_page("hidden_page")
+            st.write(url)
+            # switch_page("hidden_page")
 
         elif chosen_method == "Ngân Lượng Wallet":
             # status = create_order()
