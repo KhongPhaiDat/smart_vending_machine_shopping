@@ -347,14 +347,14 @@ resource "aws_lb" "alb_svm" {
 data "aws_subnets" "default_vpc_subnet" {
   filter {
     name   = "vpc-id"
-    values = ["vpc-021a9ff8a3e82e66a"]
+    values = ["vpc-0f2508234c7d0e246"]
   }
 }
 resource "aws_lb_target_group" "alb_svm" {
   name     = "alb-svm-tg"
   port     = 8501
   protocol = "HTTP"
-  vpc_id   = "vpc-021a9ff8a3e82e66a"
+  vpc_id   = "vpc-0f2508234c7d0e246"
 
   lifecycle {
     create_before_destroy = true
