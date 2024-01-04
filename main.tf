@@ -49,7 +49,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -59,7 +59,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -69,7 +69,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -79,7 +79,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -99,7 +99,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "12"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -109,7 +109,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -119,7 +119,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -129,7 +129,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -139,7 +139,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -149,7 +149,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -159,7 +159,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -169,7 +169,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -179,7 +179,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -189,7 +189,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -199,7 +199,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       },
@@ -209,7 +209,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10"
+            "N": "10000"
           }
         }
       }
