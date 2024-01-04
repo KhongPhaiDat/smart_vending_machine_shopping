@@ -21,11 +21,11 @@ item_new_quantity = dict()
 machine_info = {
     "id": "123456",
     "items": {
-        "milk": {"amount": 7, "price": 10},
-        "coke": {"amount": 9, "price": 10},
-        "water": {"amount": 20, "price": 10},
-        "doll": {"amount": 10, "price": 10},
-        "pencil": {"amount": 10, "price": 10},
+        "milk": {"amount": 7, "price": 10000},
+        "coke": {"amount": 9, "price": 20000},
+        "water": {"amount": 20, "price": 5000},
+        "doll": {"amount": 10, "price": 50000},
+        "pencil": {"amount": 10, "price": 7000},
     },
 }
 
