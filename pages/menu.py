@@ -4,30 +4,30 @@ import modules.menu_component as menu_component
 from streamlit_extras.switch_page_button import switch_page
 
 
-# # Init menu component
-# menu_component = menu_component.MenuComponent()
+# Init menu component
+menu_component = menu_component.MenuComponent()
 
 
-# # Get id of machine from url param
-# id = st.experimental_get_query_params()["id"][0]
+# Get id of machine from url param
+id = st.experimental_get_query_params()["id"][0]
 
-# # Get machine info base on ID
-# machine_info = menu_component.returnMenuByMachineID(id=id)
+# Get machine info base on ID
+machine_info = menu_component.returnMenuByMachineID(id=id)
 
 # Get item new quantity
 item_new_quantity = dict()
 
 # Just for testing to display
-machine_info = {
-    "id": "123456",
-    "items": {
-        "milk": {"amount": 7, "price": 10000},
-        "coke": {"amount": 9, "price": 20000},
-        "water": {"amount": 20, "price": 5000},
-        "doll": {"amount": 10, "price": 50000},
-        "pencil": {"amount": 10, "price": 7000},
-    },
-}
+# machine_info = {
+#     "id": "123456",
+#     "items": {
+#         "milk": {"amount": 7, "price": 10000},
+#         "coke": {"amount": 9, "price": 20000},
+#         "water": {"amount": 20, "price": 5000},
+#         "doll": {"amount": 10, "price": 50000},
+#         "pencil": {"amount": 10, "price": 7000},
+#     },
+# }
 
 
 # Main structure of menu page
