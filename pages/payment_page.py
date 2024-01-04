@@ -2,14 +2,26 @@ import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
 import streamlit.components.v1 as components
 import pages.menu as menu
-import webbrowser
 import hashlib
 import requests
 import hmac
 from datetime import datetime
 import urllib.parse
+from streamlit.components.v1 import html
+import time
 
 secret_key = "NRVNGGEOFCMRHZCLIRCUBYILIGPDRQKF"
+
+
+def open_page(url):
+    open_script = """
+        <script type="text/javascript">
+            window.open('%s', '_blank').focus();
+        </script>
+    """ % (
+        url
+    )
+    html(open_script)
 
 
 # Show total price
@@ -31,7 +43,7 @@ def show_payment_method():
 def ngan_luong_check_out():
     url = "https://www.nganluong.vn/checkout"
 
-    webbrowser.open_new(url)
+    # webbrowser.open_new(url)
 
 
 def hmacsha512(key, data):
@@ -104,8 +116,8 @@ def create_order():
     return url
 
 
-def redirect_new_page(url):
-    webbrowser.open(url, new=1)
+# def redirect_new_page(url):
+#     webbrowser.open(url, new=1)
 
 
 # Show pay button
@@ -118,10 +130,10 @@ def show_pay_button():
     if st.button("Pay"):
         if chosen_method == "VN Pay":
             url = create_order()
-            st.write(url)
-            redirect_new_page(url)
-            st.write(url)
-            # switch_page("hidden_page")
+
+            open_page(url)
+            time.sleep(5)
+            switch_page("hidden_page")
 
         elif chosen_method == "Ngân Lượng Wallet":
             # status = create_order()
