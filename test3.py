@@ -29,8 +29,4 @@ def transaction_status(error_code):
 
 # Example usage
 result = transaction_status(param1)
-
-st.write(result)
-
-if param1 == "00":
-    st.write("Vui lòng chờ lấy hàng")
+st.write(result)  # This will print the message for error code 12

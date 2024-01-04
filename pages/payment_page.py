@@ -74,7 +74,7 @@ def create_order():
     vnp_Locale = "vn"
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
-    vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
+    vnp_ReturnUrl = "http://localhost:8501/checkout"
     vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + str(menu.machine_info["id"])
 
     requestData = dict()
