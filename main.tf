@@ -13,6 +13,20 @@ terraform {
   }
 }
 
+# Init 1 DynamoDB table for session lock
+resource "aws_dynamodb_table" "access_lock_database" {
+  name           = "Access_lock"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "machine_id"
+
+  attribute {
+    name = "machine_id"
+    type = "S"
+  }
+}
+
 # Init 1 DynamoDB table
 resource "aws_dynamodb_table" "menu_database" {
   name           = "Menu_database"
