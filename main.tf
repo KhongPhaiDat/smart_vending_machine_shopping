@@ -219,6 +219,43 @@ resource "aws_dynamodb_table_item" "example" {
 
 ITEM
 }
+resource "aws_dynamodb_table_item" "example2" {
+  table_name = aws_dynamodb_table.menu_database.name
+  hash_key   = aws_dynamodb_table.menu_database.hash_key
+
+  item = <<ITEM
+  {
+  "id": {
+    "S": "123456"
+  },
+  "items": {
+    "M": {      
+      "tea": {
+        "M": {
+          "amount": {
+            "N": "10"
+          },
+          "price": {
+            "N": "10000"
+          }
+        }
+      },
+      "water": {
+        "M": {
+          "amount": {
+            "N": "10"
+          },
+          "price": {
+            "N": "10000"
+          }
+        }
+      }
+    }
+  }
+}
+
+ITEM
+}
 # Init 1 EC2 instance for deploy web app
 resource "aws_instance" "smart_vending_machine1" {
   ami           = "ami-0dfa284c9d7b2adad"
