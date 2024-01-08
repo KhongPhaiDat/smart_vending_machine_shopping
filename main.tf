@@ -13,6 +13,23 @@ terraform {
   }
 }
 
+# Init 1 DynamoDB table for order history
+resource "aws_dynamodb_table" "order_history" {
+  name         = "order_history"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "order"
+
+  attribute {
+    name = "order"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+}
+
 # Init 1 DynamoDB table for session lock
 resource "aws_dynamodb_table" "access_lock_database" {
   name           = "Access_lock"
