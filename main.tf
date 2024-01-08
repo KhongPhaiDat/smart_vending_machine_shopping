@@ -13,6 +13,23 @@ terraform {
   }
 }
 
+# Init 1 DynamoDB table for order history
+resource "aws_dynamodb_table" "order_history" {
+  name         = "order_history"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "order"
+
+  attribute {
+    name = "order"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+}
+
 # Init 1 DynamoDB table for session lock
 resource "aws_dynamodb_table" "access_lock_database" {
   name           = "Access_lock"
@@ -104,126 +121,6 @@ resource "aws_dynamodb_table_item" "example" {
           },
           "price": {
             "N": "0"
-          }
-        }
-      },
-      "dried_fruits": {
-        "M": {
-          "amount": {
-            "N": "12"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "gummies": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "ice_cream": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "instant_cup_noodle": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "nuts": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "orange_juice": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "salads": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "sandwiches": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "soda": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "sweet_candy": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "tea": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "water": {
-        "M": {
-          "amount": {
-            "N": "10"
-          },
-          "price": {
-            "N": "10000"
           }
         }
       }
