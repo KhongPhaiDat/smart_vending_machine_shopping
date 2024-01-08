@@ -104,8 +104,8 @@ def show_total_price():
 
 # Go to confirm page
 def confirm():
-    if st.button("Go to Cart"):
-        switch_page("confirm")
+    if st.button("Go to Purchase"):
+        switch_page("payment_page")
 
 
 # if __name__ == "__main__":
