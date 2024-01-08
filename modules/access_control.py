@@ -10,7 +10,7 @@ class AccessControl:
     def __init__(self, machine_id, session_id) -> None:
         self.dyn_resource = boto3.resource(
             "dynamodb", region_name="ap-northeast-1")
-        self.table = self.dyn_resource.Table("Access-lock")
+        self.table = self.dyn_resource.Table("Access_lock")
         self.machine_id = machine_id
         self.session_id = session_id
 

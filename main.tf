@@ -242,7 +242,7 @@ resource "aws_iam_role" "ec2_dynamodb" {
             "dynamodb:UpdateItem"
           ],
           "Effect" : "Allow",
-          "Resource" : "${aws_dynamodb_table.menu_database.arn}"
+          "Resource" : ["${aws_dynamodb_table.menu_database.arn}", "${aws_dynamodb_table.access_lock_database.arn}", "${aws_dynamodb_table.order_history.arn}"]
         }
       ]
     })
