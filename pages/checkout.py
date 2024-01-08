@@ -16,6 +16,7 @@ def add_orders_to_database():
 
     order_message[key]["transaction_status_code"] = vnp_ResponseCode
     #
+    #
     return order_message
 
 
