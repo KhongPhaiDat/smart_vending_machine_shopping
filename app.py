@@ -3,6 +3,13 @@ import boto3
 from datetime import datetime, timedelta
 import streamlit as st
 import pages.menu as menu
+
+from datetime import datetime
+
+day_time = ""
+
+# Menu
+
 import uuid
 import modules.access_control as access_control
 
@@ -90,3 +97,4 @@ def main():
 
 
 main()
+
