@@ -75,7 +75,8 @@ def create_order():
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
     vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + str(menu.machine_info["id"])
+    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + \
+        str(menu.machine_info["id"])
 
     requestData = dict()
     requestData["vnp_Version"] = vnp_Version
@@ -98,7 +99,8 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" +
+                urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -148,13 +150,21 @@ def show_pay_button():
 # Show cancel button
 def show_cancel_button():
     if st.button("Cancel"):
-        switch_page("app")
+        # Got bug that cannot extract machine id from url
+        # switch_page("app")
+        # Request user to scan QR code again to shop
+        # End session
+        st.write("Đang trong quá trình phát triển!")
 
 
 def main():
-    show_total_price()
-    show_pay_button()
-    show_cancel_button()
+    if 'session_id' not in st.session_state:
+        st.write(
+            "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!")
+    else:
+        show_total_price()
+        show_pay_button()
+        show_cancel_button()
 
 
 if __name__ == "__main__":
