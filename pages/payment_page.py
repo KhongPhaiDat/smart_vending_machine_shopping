@@ -61,8 +61,8 @@ def get_client_ip(request):
     return ip
 
 
-# Create order and send to Ngan Luong.
-def create_order():
+#  prepare data to send to API
+def prepare_data(status):
     vnp_Version = "2.1.0"
     vnp_Command = "pay"
     vnp_TmnCode = "SMXX9OJQ"
@@ -75,14 +75,18 @@ def create_order():
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
     vnp_ReturnUrl = "http://localhost:8501/checkout"
-    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + str(menu.machine_info["id"])
+
+    if status == 0:
+        menu.date_time = datetime.now().strftime("%Y%m%d%H%M%S")
+
+    vnp_TxnRef = menu.date_time + str(menu.machine_info["id"])
 
     requestData = dict()
     requestData["vnp_Version"] = vnp_Version
     requestData["vnp_Command"] = vnp_Command
     requestData["vnp_TmnCode"] = vnp_TmnCode
     requestData["vnp_Amount"] = vnp_Amount
-    requestData["vnp_CreateDate"] = datetime.now().strftime("%Y%m%d%H%M%S")
+    requestData["vnp_CreateDate"] = menu.date_time
     requestData["vnp_CurrCode"] = vnp_CurrCode
     requestData["vnp_IpAddr"] = vnp_IpAddr
     requestData["vnp_Locale"] = vnp_Locale
@@ -91,6 +95,12 @@ def create_order():
     requestData["vnp_ReturnUrl"] = vnp_ReturnUrl
     requestData["vnp_TxnRef"] = vnp_TxnRef
 
+    return requestData
+
+
+# Create order and send to VNPAY.
+def create_order():
+    requestData = prepare_data(0)
     inputData = sorted(requestData.items())
     queryString = ""
 
@@ -118,6 +128,68 @@ def create_order():
 
 # def redirect_new_page(url):
 #     webbrowser.open(url, new=1)
+
+
+# Collect order information
+# - ORDER CODER (PRIMARY KEY)
+# - MACHINE ID
+# - ITEMS (name, price per item, quantity, total cost per item)
+# - TOTAL PRICE OF ORDER
+# RETURN
+# "<ORDER>": {
+# 		"vending_machine_id" : "",
+# 		"items": {
+# 			"<item1>": {
+# 				"price": <price>,
+# 				"quantity": <quantity>,
+# 				"cost": <cost>
+# 			},
+# 			"<item2>": {
+# 				"price": <price>,
+# 				"quantity": <quantity>,
+# 				"cost": <cost>
+# 			},
+# 			...
+# 		},
+# 		"total_price": <total_price_of_order>,
+# 	}
+def collect_order_info():
+    message = dict()
+
+    # Retrieve sending URL to VN Pay
+
+    # requestData["vnp_TxnRef"] is the ORDER Key
+    globalRequestData = prepare_data(1)
+
+    message[str(globalRequestData["vnp_TxnRef"])] = dict()
+
+    # machine_info
+    machine_info = menu.machine_info
+
+    # menu.machine_info['id'] is the id of vending machine
+    message[str(globalRequestData["vnp_TxnRef"])]["vending_machine_id"] = machine_info[
+        "id"
+    ]
+
+    # Add items info
+    message[str(globalRequestData["vnp_TxnRef"])]["items"] = dict()
+    items = machine_info["items"]
+
+    for item_name, item_properties in items.items():
+        # st.write(item_properties["price"])
+        message[str(globalRequestData["vnp_TxnRef"])]["items"][str(item_name)] = {
+            "price": item_properties["price"],
+            "quantity": item_properties["amount"],
+            "cost": item_properties["price"] * item_properties["amount"],
+        }
+
+    # Add total cost
+    message[str(globalRequestData["vnp_TxnRef"])][
+        "total_price"
+    ] = menu.calculate_total_price()
+
+    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
+    return message
 
 
 # Show pay button
