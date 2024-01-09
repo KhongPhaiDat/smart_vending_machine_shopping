@@ -3,6 +3,49 @@ import pages.payment_page as payment_page
 import boto3
 
 
+# reformat message to match dynamoDB
+def reformat_message(message):
+    new_message = dict()
+
+    key = ""
+    for a, _ in message.items():
+        if key == "":
+            key = a
+            break
+
+    new_message = {"order": {"S": "ua3dXFyQwMSMzvzEC"}}
+
+    new_message["vending_machine_id"] = {"S": message[key]["vending_machine_id"]}
+
+    new_message["items"] = {"M": dict()}
+
+    for name, value in message[key]["items"].items():
+        new_message["items"]["M"] = {str(name): dict()}
+        new_message["items"]["M"][str(name)] = {"M": dict()}
+        new_message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
+        new_message["items"]["M"][str(name)]["M"]["quantity"] = {
+            "N": str(value["quantity"])
+        }
+        new_message["items"]["M"][str(name)]["M"]["cost"] = {"N": str(value["cost"])}
+    new_message["total_price"] = {"N": str(message[key]["total_price"])}
+    new_message["transaction_status_code"] = {
+        "S": str(message[key]["transaction_status_code"])
+    }
+
+    return new_message
+
+
+# prepare dynamoDB to push data
+def add_to_database(message):
+    dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
+    table_name = "order_history"
+
+    message = reformat_message(message)
+
+    response = dynamoDB_client.put_item(Item=message, TableName="order_history")
+    return response
+
+
 def return_status(error):
     status = {
         "00": "Giao dịch thành công",  # Successful transaction
