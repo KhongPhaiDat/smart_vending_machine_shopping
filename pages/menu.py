@@ -92,7 +92,7 @@ def show_total_price():
     st.write("Total Price: ", total_price)
 
 
-# Go to confirm page
+# Go to payment page
 def confirm():
     if st.button("Go to Purchase"):
         switch_page("payment_page")

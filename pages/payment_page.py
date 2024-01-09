@@ -41,26 +41,10 @@ def show_payment_method():
     return chosen_method
 
 
-# Redirect to Ngân Lượng Checkout URL
-def ngan_luong_check_out():
-    url = "https://www.nganluong.vn/checkout"
-
-    # webbrowser.open_new(url)
-
-
 def hmacsha512(key, data):
     byteKey = key.encode("utf-8")
     byteData = data.encode("utf-8")
     return hmac.new(byteKey, byteData, hashlib.sha512).hexdigest()
-
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
-    else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
 
 
 #  prepare data to send to API
