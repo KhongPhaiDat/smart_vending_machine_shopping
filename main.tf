@@ -239,7 +239,8 @@ resource "aws_iam_role" "ec2_dynamodb" {
           "Sid" : "Stmt1703145729575",
           "Action" : [
             "dynamodb:GetItem",
-            "dynamodb:UpdateItem"
+            "dynamodb:UpdateItem",
+            "dynamodb:PutItem"
           ],
           "Effect" : "Allow",
           "Resource" : ["${aws_dynamodb_table.menu_database.arn}", "${aws_dynamodb_table.access_lock_database.arn}", "${aws_dynamodb_table.order_history.arn}"]
