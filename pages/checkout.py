@@ -13,9 +13,9 @@ def reformat_message(message):
             key = a
             break
 
-    new_message = {"order": {"S": "ua3dXFyQwMSMzvzEC"}}
+    new_message = {"order": {"S": str(key)}}
 
-    new_message["vending_machine_id"] = {"S": message[key]["vending_machine_id"]}
+    new_message["vending_machine_id"] = {"S": message[str(key)]["vending_machine_id"]}
 
     new_message["items"] = {"M": dict()}
 
@@ -36,11 +36,12 @@ def reformat_message(message):
 
 
 # prepare dynamoDB to push data
-def add_to_database(message):
+def add_to_database(message, response):
     dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
     table_name = "order_history"
 
     message = reformat_message(message)
+    message["transaction_status_code"] = {"S": str(response)}
 
     response = dynamoDB_client.put_item(Item=message, TableName="order_history")
     return response
@@ -72,5 +73,10 @@ def return_status(error):
         st.write(error_solve + " " + status[error])
 
 
+# Return Response
 response = st.experimental_get_query_params()["vnp_ResponseCode"][0]
 return_status(response)
+
+# Update to Database
+order_message = payment_page.collect_order_info()
+add_to_database(order_message, response)
