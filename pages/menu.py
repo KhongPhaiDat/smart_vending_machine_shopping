@@ -19,18 +19,6 @@ machine_info = menu_component.returnMenuByMachineID(id=id)
 # Get item new quantity
 item_new_quantity = dict()
 
-# Just for testing to display
-# machine_info = {
-#     "id": "123456",
-#     "items": {
-#         "milk": {"amount": 7, "price": 10000},
-#         "coke": {"amount": 9, "price": 20000},
-#         "water": {"amount": 20, "price": 5000},
-#         "doll": {"amount": 10, "price": 50000},
-#         "pencil": {"amount": 10, "price": 7000},
-#     },
-# }
-
 
 # Main structure of menu page
 def main():
@@ -108,7 +96,3 @@ def show_total_price():
 def confirm():
     if st.button("Go to Purchase"):
         switch_page("payment_page")
-
-
-# if __name__ == "__main__":
-#     main()

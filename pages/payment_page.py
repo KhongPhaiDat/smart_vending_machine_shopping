@@ -1,9 +1,7 @@
 import streamlit as st
 from streamlit_extras.switch_page_button import switch_page
-import streamlit.components.v1 as components
 import pages.menu as menu
 import hashlib
-import requests
 import hmac
 from datetime import datetime
 import urllib.parse
