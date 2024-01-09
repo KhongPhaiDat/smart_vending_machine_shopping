@@ -31,8 +31,7 @@ def show_total_price():
     st.write("Total Price: ", menu.calculate_total_price())
 
 
-payment_methods = ["Vui lòng chọn", "VN Pay", "Ngân Lượng Wallet", "PayPal"]
-api_url = ""
+payment_methods = ["Vui lòng chọn", "VN Pay"]
 
 
 # Show payment method
@@ -109,14 +108,7 @@ def create_order():
         + "&vnp_SecureHash="
         + vnp_SecureHash
     )
-
-    print(url)
-
     return url
-
-
-# def redirect_new_page(url):
-#     webbrowser.open(url, new=1)
 
 
 # Collect order information
@@ -144,9 +136,6 @@ def create_order():
 # 	}
 def collect_order_info():
     message = dict()
-
-    # Retrieve sending URL to VN Pay
-
     # requestData["vnp_TxnRef"] is the ORDER Key
     globalRequestData = prepare_data(1)
 
@@ -191,17 +180,9 @@ def show_pay_button():
     if st.button("Pay"):
         if chosen_method == "VN Pay":
             url = create_order()
-
             open_page(url)
             time.sleep(5)
             switch_page("hidden_page")
-
-        elif chosen_method == "Ngân Lượng Wallet":
-            # status = create_order()
-            st.write("Ngân lượng docx phức tạp quá!!!")
-
-        elif chosen_method == "PayPal":
-            st.write("Đang trong quá trình phát triển!")
         elif chosen_method == "Vui lòng chọn":
             st.write("Chọn đi thằng ml")
 

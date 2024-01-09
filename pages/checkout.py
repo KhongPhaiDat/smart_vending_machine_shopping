@@ -38,7 +38,6 @@ def reformat_message(message):
 # prepare dynamoDB to push data
 def add_to_database(message, response):
     dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
-    table_name = "order_history"
 
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
