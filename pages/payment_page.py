@@ -75,7 +75,12 @@ def prepare_data(status):
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
     vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + str(menu.machine_info["id"])
+    # vnp_ReturnUrl = "http://localhost:8501/checkout"
+
+    if status == 0:
+        menu.date_time = datetime.now().strftime("%Y%m%d%H%M%S")
+
+    vnp_TxnRef = menu.date_time + str(menu.machine_info["id"])
 
     requestData = dict()
     requestData["vnp_Version"] = vnp_Version
