@@ -9,8 +9,12 @@ from datetime import datetime
 import urllib.parse
 from streamlit.components.v1 import html
 import time
+from zoneinfo import ZoneInfo
+
 
 secret_key = "NRVNGGEOFCMRHZCLIRCUBYILIGPDRQKF"
+
+timezone = ZoneInfo("Asia/Ho_Chi_Minh")
 
 
 def open_page(url):
@@ -74,11 +78,11 @@ def prepare_data(status):
     vnp_Locale = "vn"
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
-    vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    # vnp_ReturnUrl = "http://localhost:8501/checkout"
+    # vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
+    vnp_ReturnUrl = "http://localhost:8501/checkout"
 
     if status == 0:
-        menu.date_time = datetime.now().strftime("%Y%m%d%H%M%S")
+        menu.date_time = datetime.now(timezone).strftime("%Y%m%d%H%M%S")
 
     vnp_TxnRef = menu.date_time + str(menu.machine_info["id"])
 
