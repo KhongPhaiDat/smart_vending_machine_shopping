@@ -75,8 +75,7 @@ def prepare_data(status):
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
     vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + \
-        str(menu.machine_info["id"])
+    vnp_TxnRef = datetime.now().strftime("%Y%m%d%H%M%S") + str(menu.machine_info["id"])
 
     requestData = dict()
     requestData["vnp_Version"] = vnp_Version
@@ -105,8 +104,7 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" +
-                urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -120,6 +118,8 @@ def create_order():
         + "&vnp_SecureHash="
         + vnp_SecureHash
     )
+
+    print(url)
 
     return url
 
@@ -226,9 +226,10 @@ def show_cancel_button():
 
 
 def main():
-    if 'session_id' not in st.session_state:
+    if "session_id" not in st.session_state:
         st.write(
-            "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!")
+            "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+        )
     else:
         show_total_price()
         show_pay_button()

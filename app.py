@@ -6,7 +6,7 @@ import pages.menu as menu
 
 from datetime import datetime
 
-day_time = ""
+date_time = ""
 
 # Menu
 
@@ -17,16 +17,15 @@ NEW_ACCESS = 0
 CONTINUE_ACCESS = 1
 NO_ACCESS = 2
 
-if 'session_id' not in st.session_state:
-    st.session_state['session_id'] = str(uuid.uuid4())
+if "session_id" not in st.session_state:
+    st.session_state["session_id"] = str(uuid.uuid4())
 
-st.write("Your session id is: ", st.session_state['session_id'])
+st.write("Your session id is: ", st.session_state["session_id"])
 
-machine_id = st.experimental_get_query_params()['id'][0]
+machine_id = st.experimental_get_query_params()["id"][0]
 
 access_control = access_control.AccessControl(
-    machine_id=machine_id,
-    session_id=st.session_state['session_id']
+    machine_id=machine_id, session_id=st.session_state["session_id"]
 )
 
 # # Thiết lập kết nối DynamoDB
@@ -82,11 +81,11 @@ access_control = access_control.AccessControl(
 
 
 def main():
-
     access_decision = access_control.get_access_info()
     if access_decision == NO_ACCESS:
         st.write(
-            "Máy đang được sử dụng bởi người dùng khác. Vui lòng đợi một lát nhé!!!")
+            "Máy đang được sử dụng bởi người dùng khác. Vui lòng đợi một lát nhé!!!"
+        )
     elif access_decision == NEW_ACCESS:
         access_control.start_user_session()
         st.write("Bạn đang mua hàng tại máy số: ", machine_id)
@@ -97,4 +96,3 @@ def main():
 
 
 main()
-

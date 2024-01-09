@@ -3,6 +3,8 @@ import streamlit as st
 import modules.menu_component as menu_component
 from streamlit_extras.switch_page_button import switch_page
 
+# Initialize da
+date_time = ""
 
 # Init menu component
 menu_component = menu_component.MenuComponent()
