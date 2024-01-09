@@ -2,5 +2,5 @@
 
 By Dat Nguyen Tan and Anh Nguyen Hoang
 
-To view demo, please scan QR:
+To view demo, please scan this QR:
 ![Alt text](QR.png)
