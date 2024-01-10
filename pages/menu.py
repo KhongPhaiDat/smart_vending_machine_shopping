@@ -11,7 +11,7 @@ menu_component = menu_component.MenuComponent()
 
 
 # Get id of machine from url param
-id = st.experimental_get_query_params()["id"][0]
+id = st.session_state["machine_id"]
 
 # Get machine info base on ID
 machine_info = menu_component.returnMenuByMachineID(id=id)

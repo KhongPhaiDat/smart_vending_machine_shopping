@@ -17,6 +17,8 @@ st.write("Your session id is: ", st.session_state["session_id"])
 
 machine_id = st.experimental_get_query_params()["id"][0]
 
+st.session_state["machine_id"] = machine_id
+
 access_control = access_control.AccessControl(
     machine_id=machine_id, session_id=st.session_state["session_id"]
 )
