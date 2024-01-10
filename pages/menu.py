@@ -9,12 +9,17 @@ date_time = ""
 # Init menu component
 menu_component = menu_component.MenuComponent()
 
-
+machine_info = None
 # Get id of machine from url param
-id = st.experimental_get_query_params()["id"][0]
+try:
+    id = st.experimental_get_query_params()["id"][0]
+    # Get machine info base on ID
+    machine_info = menu_component.returnMenuByMachineID(id=id)
+except:
+    st.write(
+        "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+    )
 
-# Get machine info base on ID
-machine_info = menu_component.returnMenuByMachineID(id=id)
 
 # Get item new quantity
 item_new_quantity = dict()

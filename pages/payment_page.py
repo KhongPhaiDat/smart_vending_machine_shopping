@@ -94,7 +94,8 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" +
+                urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -166,7 +167,8 @@ def collect_order_info():
         "total_price"
     ] = menu.calculate_total_price()
 
-    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
+    message[str(globalRequestData["vnp_TxnRef"])
+            ]["transaction_status_code"] = ""
     return message
 
 
@@ -198,6 +200,7 @@ def show_cancel_button():
 
 
 def main():
+    st.write(st.session_state)
     if "session_id" not in st.session_state:
         st.write(
             "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
