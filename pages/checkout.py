@@ -18,9 +18,9 @@ def reformat_message(message):
     new_message["vending_machine_id"] = {"S": message[str(key)]["vending_machine_id"]}
 
     new_message["items"] = {"M": dict()}
+    new_message["items"]["M"] = dict()
 
     for name, value in message[key]["items"].items():
-        new_message["items"]["M"] = {str(name): dict()}
         new_message["items"]["M"][str(name)] = {"M": dict()}
         new_message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
         new_message["items"]["M"][str(name)]["M"]["quantity"] = {
@@ -81,7 +81,7 @@ def get_order_key():
 
 # retrieve order from "order_history" base on order_key
 def get_order_from_database_based_on_key():
-    dynamoDB = boto3.resource("dynamodb")
+    dynamoDB = boto3.resource("dynamodb", region_name="ap-northeast-1")
     table = dynamoDB.Table("order_history")
     order_key = get_order_key()
     response = table.get_item(Key={"order": order_key})
