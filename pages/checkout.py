@@ -46,6 +46,7 @@ def add_to_database(message, response):
     return response
 
 
+# return status code
 def return_status(error):
     status = {
         "00": "Giao dịch thành công",  # Successful transaction
@@ -72,10 +73,29 @@ def return_status(error):
         st.write(error_solve + " " + status[error])
 
 
-# Return Response
+# get order_key after checking out successfully
+def get_order_key():
+    order_key = st.experimental_get_query_params()["vnp_TxnRef"][0]
+    return order_key
+
+
+# retrieve order from "order_history" base on order_key
+def get_order_from_database_based_on_key():
+    dynamoDB = boto3.resource("dynamodb")
+    table = dynamoDB.Table("order_history")
+    order_key = get_order_key()
+    response = table.get_item(Key={"order": order_key})
+    return response["Item"]["items"]
+
+
+# return response
 response = st.experimental_get_query_params()["vnp_ResponseCode"][0]
 return_status(response)
 
-# Update to Database
+# push order to database to  "order_history" database
 order_message = payment_page.collect_order_info()
 add_to_database(order_message, response)
+
+# get order list from database based on order key
+order_response = get_order_from_database_based_on_key()
+st.write(order_response)
