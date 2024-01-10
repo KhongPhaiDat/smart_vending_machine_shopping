@@ -1,6 +1,8 @@
 import streamlit as st
 import pages.payment_page as payment_page
 import boto3
+import requests
+import json
 
 
 # reformat message to match dynamoDB
@@ -42,7 +44,9 @@ def add_to_database(message, response):
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
 
+    # st.write("Djt me FPT")
     response = dynamoDB_client.put_item(Item=message, TableName="order_history")
+    # st.write(response)
     return response
 
 
@@ -85,6 +89,7 @@ def get_order_from_database_based_on_key():
     table = dynamoDB.Table("order_history")
     order_key = get_order_key()
     response = table.get_item(Key={"order": order_key})
+    # st.write(response)
     return response["Item"]["items"]
 
 
@@ -99,3 +104,60 @@ add_to_database(order_message, response)
 # get order list from database based on order key
 order_response = get_order_from_database_based_on_key()
 st.write(order_response)
+
+
+# get machine id
+def get_machine_id():
+    dynamoDB = boto3.resource("dynamodb", region_name="ap-northeast-1")
+    table = dynamoDB.Table("order_history")
+    order_key = get_order_key()
+    response = table.get_item(Key={"order": order_key})
+    machine_id = response["Item"]["vending_machine_id"]
+    return machine_id
+
+
+# create release message
+def create_release_message(machine_id, order_list):
+    message = dict()
+    # Message is Json {
+    #     'machine_id': machine_id,
+    #     'order_list': order_list
+    # }
+
+    message = {"machine_id": machine_id, "order_list": order_list}
+    return message
+
+
+# define URL dictionary
+def get_url_dictionary():
+    vending_URL_repository = dict()
+
+    vending_URL_repository[
+        "ua3dXFyQwMSMzvzEC"
+    ] = "https://ozkhtpzc54m7jzgngyw4ent5cu0fojgr.lambda-url.ap-northeast-1.on.aws/"
+
+    return vending_URL_repository
+
+
+# Get corresponding machine ID URL
+def mapping_machine_to_lambda_URL(machine_id):
+    data_url = get_url_dictionary()
+    return data_url[machine_id]
+
+
+# send request to vending machine id
+def send_request_to_vending_machine_id(machine_id, message):
+    lambda_url = mapping_machine_to_lambda_URL(machine_id)
+    response = requests.post(lambda_url, data=message)
+
+    return response
+
+
+# send message to
+if response == "00":
+    machine_id = get_machine_id()
+    order_list = get_order_from_database_based_on_key()
+    message = create_release_message(machine_id, order_list)
+    lambda_response = send_request_to_vending_machine_id(machine_id, message)
+
+    st.write(lambda_response.text)
