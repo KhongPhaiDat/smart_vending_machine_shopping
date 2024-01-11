@@ -29,7 +29,6 @@ def main():
 if "session_id" not in st.session_state:
     st.session_state["session_id"] = str(uuid.uuid4())
 
-st.write("Your session id is: ", st.session_state["session_id"])
 try:
     machine_id = st.experimental_get_query_params()["id"][0]
     if "machine_id" not in st.session_state:
@@ -39,7 +38,6 @@ except:
         "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
     )
 
-st.write(st.session_state)
 if "machine_id" in st.session_state:
     access_control = access_control.AccessControl(
         machine_id=machine_id, session_id=st.session_state["session_id"]
