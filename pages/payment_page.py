@@ -8,11 +8,15 @@ import urllib.parse
 from streamlit.components.v1 import html
 import time
 from zoneinfo import ZoneInfo
+from decimal import Decimal
 
 
 secret_key = "NRVNGGEOFCMRHZCLIRCUBYILIGPDRQKF"
 
 timezone = ZoneInfo("Asia/Ho_Chi_Minh")
+
+# st.write("item_new_quantity", menu.item_new_quantity)
+# st.write("machine_info: ", menu.machine_info)
 
 
 def open_page(url):
@@ -60,7 +64,7 @@ def prepare_data(status):
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
     vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    # vnp_ReturnUrl = "http://localhost:8501/checkout"
+    # vnp_ReturnUrl = "http://localhosts:8501/checkout"
 
     if status == 0:
         menu.date_time = datetime.now(timezone).strftime("%Y%m%d%H%M%S")
@@ -94,8 +98,7 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" +
-                urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -142,8 +145,14 @@ def collect_order_info():
 
     message[str(globalRequestData["vnp_TxnRef"])] = dict()
 
-    # machine_info
+    # Get updated machine_info
     machine_info = menu.machine_info
+
+    # Update quantity from user
+    for item_name, value in menu.item_new_quantity.items():
+        machine_info["items"][item_name]["amount"] = Decimal(value)
+
+    # st.write("Updated machine info:", machine_info)
 
     # menu.machine_info['id'] is the id of vending machine
     message[str(globalRequestData["vnp_TxnRef"])]["vending_machine_id"] = machine_info[
@@ -167,8 +176,7 @@ def collect_order_info():
         "total_price"
     ] = menu.calculate_total_price()
 
-    message[str(globalRequestData["vnp_TxnRef"])
-            ]["transaction_status_code"] = ""
+    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
     return message
 
 

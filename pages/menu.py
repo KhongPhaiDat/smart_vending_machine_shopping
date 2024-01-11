@@ -15,6 +15,7 @@ id = st.experimental_get_query_params()["id"][0]
 # Get machine info base on ID
 machine_info = menu_component.returnMenuByMachineID(id=id)
 
+
 # Get item new quantity
 item_new_quantity = dict()
 
