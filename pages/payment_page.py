@@ -10,13 +10,8 @@ import time
 from zoneinfo import ZoneInfo
 from decimal import Decimal
 
-
 secret_key = "NRVNGGEOFCMRHZCLIRCUBYILIGPDRQKF"
-
 timezone = ZoneInfo("Asia/Ho_Chi_Minh")
-
-# st.write("item_new_quantity", menu.item_new_quantity)
-# st.write("machine_info: ", menu.machine_info)
 
 
 def open_page(url):
@@ -70,7 +65,6 @@ def prepare_data(status):
         menu.date_time = datetime.now(timezone).strftime("%Y%m%d%H%M%S")
 
     vnp_TxnRef = menu.date_time + str(menu.machine_info["id"])
-
     requestData = dict()
     requestData["vnp_Version"] = vnp_Version
     requestData["vnp_Command"] = vnp_Command
@@ -84,7 +78,6 @@ def prepare_data(status):
     requestData["vnp_OrderType"] = vnp_OrderType
     requestData["vnp_ReturnUrl"] = vnp_ReturnUrl
     requestData["vnp_TxnRef"] = vnp_TxnRef
-
     return requestData
 
 
@@ -93,13 +86,11 @@ def create_order():
     requestData = prepare_data(0)
     inputData = sorted(requestData.items())
     queryString = ""
-
     seq = 0
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" +
-                urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -116,34 +107,10 @@ def create_order():
     return url
 
 
-# Collect order information
-# - ORDER CODER (PRIMARY KEY)
-# - MACHINE ID
-# - ITEMS (name, price per item, quantity, total cost per item)
-# - TOTAL PRICE OF ORDER
-# RETURN
-# "<ORDER>": {
-# 		"vending_machine_id" : "",
-# 		"items": {
-# 			"<item1>": {
-# 				"price": <price>,
-# 				"quantity": <quantity>,
-# 				"cost": <cost>
-# 			},
-# 			"<item2>": {
-# 				"price": <price>,
-# 				"quantity": <quantity>,
-# 				"cost": <cost>
-# 			},
-# 			...
-# 		},
-# 		"total_price": <total_price_of_order>,
-# 	}
 def collect_order_info():
     message = dict()
     # requestData["vnp_TxnRef"] is the ORDER Key
     globalRequestData = prepare_data(1)
-
     message[str(globalRequestData["vnp_TxnRef"])] = dict()
 
     # Get updated machine_info
@@ -152,8 +119,6 @@ def collect_order_info():
     # Update quantity from user
     for item_name, value in menu.item_new_quantity.items():
         machine_info["items"][item_name]["amount"] = Decimal(value)
-
-    # st.write("Updated machine info:", machine_info)
 
     # menu.machine_info['id'] is the id of vending machine
     message[str(globalRequestData["vnp_TxnRef"])]["vending_machine_id"] = machine_info[
@@ -165,7 +130,6 @@ def collect_order_info():
     items = machine_info["items"]
 
     for item_name, item_properties in items.items():
-        # st.write(item_properties["price"])
         message[str(globalRequestData["vnp_TxnRef"])]["items"][str(item_name)] = {
             "price": item_properties["price"],
             "quantity": item_properties["amount"],
@@ -176,19 +140,15 @@ def collect_order_info():
     message[str(globalRequestData["vnp_TxnRef"])][
         "total_price"
     ] = menu.calculate_total_price()
-
-    message[str(globalRequestData["vnp_TxnRef"])
-            ]["transaction_status_code"] = ""
+    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
     return message
 
 
 # Show pay button
 def show_pay_button():
     st.warning("Please choose your payment method!")
-
     st.warning("If you want to cancel, please press CANCEL button below!")
     chosen_method = show_payment_method()
-
     if st.button("Pay"):
         if chosen_method == "VN Pay":
             url = create_order()
@@ -196,21 +156,16 @@ def show_pay_button():
             time.sleep(5)
             switch_page("hidden_page")
         elif chosen_method == "Vui lòng chọn":
-            st.write("Chọn đi thằng ml")
+            st.write("Hãy chọn phương thức thanh toán")
 
 
 # Show cancel button
 def show_cancel_button():
     if st.button("Cancel"):
-        # Got bug that cannot extract machine id from url
-        # switch_page("app")
-        # Request user to scan QR code again to shop
-        # End session
-        st.write("Đang trong quá trình phát triển!")
+        switch_page("cancel")
 
 
 def main():
-    st.write(st.session_state)
     if "session_id" not in st.session_state:
         st.write(
             "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
