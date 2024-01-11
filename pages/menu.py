@@ -39,16 +39,34 @@ def main():
 
 # Show info of item
 def show_items(name_item, info_item):
-    # Show name
-    st.write(name_item)
+    col1, col2 = st.columns([1, 2])
 
-    # Show amount of item
-    amount = info_item["amount"]
-    st.write("Quantity remaining: ", amount)
+    with col1:
+        try:
+            st.image(f"images/{name_item}.jpg", use_column_width=True)
+        except:
+            st.image("images/unknown.jpg", use_column_width=True)
 
-    # Show price of item
-    price = info_item["price"]
-    st.write("Price: ", price)
+    with col2:
+        st.write(f"Price: {info_item["price"]}")
+        st.write(f"Quantity remaining: {info_item["amount"]}")
+        # Assuming the circles are for quantity selection
+        quantity = get_new_quantity(name_item)
+
+        item_new_quantity[name_item] = quantity
+
+    st.markdown("<hr/>", unsafe_allow_html=True)
+
+    # # Show name
+    # st.write(name_item)
+
+    # # Show amount of item
+    # amount = info_item["amount"]
+    # st.write("Quantity remaining: ", amount)
+
+    # # Show price of item
+    # price = info_item["price"]
+    # st.write("Price: ", price)
 
 
 # User input quantity of item
@@ -71,7 +89,8 @@ def insert_amount_item():
 
     for item, info_item in items.items():
         show_items(item, info_item)
-        item_new_quantity[item] = get_new_quantity(item)
+
+        # item_new_quantity[item] = get_new_quantity(item)
 
 
 # Calculate total price
