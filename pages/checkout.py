@@ -267,5 +267,5 @@ if response == "00":
         update_item_list_in_database(machine_id, order_list)
 
 # update access lock to release lock
-access_control = AccessControl.AccessControl(machine_id)
+access_control = AccessControl(machine_id)
 access_control.end_user_session()
