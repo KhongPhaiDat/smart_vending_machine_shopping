@@ -30,6 +30,23 @@ resource "aws_dynamodb_table" "order_history" {
   }
 }
 
+# Init 1 DynamoDB table for release control status
+resource "aws_dynamodb_table" "release_control" {
+  name         = "release_control"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "order_id"
+
+  attribute {
+    name = "order_id"
+    type = "S"
+  }
+
+  ttl {
+    attribute_name = "ttl"
+    enabled        = true
+  }
+}
+
 # Init 1 DynamoDB table for session lock
 resource "aws_dynamodb_table" "access_lock_database" {
   name           = "Access_lock"
