@@ -1,4 +1,5 @@
 from modules.access_control import AccessControl
+from modules.release_control import ReleaseControl
 import streamlit as st
 import pages.payment_page as payment_page
 import modules.menu_component as menu_component
@@ -15,16 +16,19 @@ def reformat_message(message):
             key = a
             break
     new_message = {"order": {"S": str(key)}}
-    new_message["vending_machine_id"] = {"S": message[str(key)]["vending_machine_id"]}
+    new_message["vending_machine_id"] = {
+        "S": message[str(key)]["vending_machine_id"]}
     new_message["items"] = {"M": dict()}
     new_message["items"]["M"] = dict()
     for name, value in message[key]["items"].items():
         new_message["items"]["M"][str(name)] = {"M": dict()}
-        new_message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
+        new_message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
         new_message["items"]["M"][str(name)]["M"]["quantity"] = {
             "N": str(value["quantity"])
         }
-        new_message["items"]["M"][str(name)]["M"]["cost"] = {"N": str(value["cost"])}
+        new_message["items"]["M"][str(name)]["M"]["cost"] = {
+            "N": str(value["cost"])}
     new_message["total_price"] = {"N": str(message[key]["total_price"])}
     new_message["transaction_status_code"] = {
         "S": str(message[key]["transaction_status_code"])
@@ -38,7 +42,8 @@ def add_to_database(message, response):
     dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
-    response = dynamoDB_client.put_item(Item=message, TableName="order_history")
+    response = dynamoDB_client.put_item(
+        Item=message, TableName="order_history")
     return response
 
 
@@ -158,7 +163,8 @@ def subtract_from_order_list(origin_item_list, order_list):
     for key in reformat_order_list.keys():
         subtracted_item_list[key] = dict()
         subtracted_item_list[key]["amount"] = (
-            reformat_origin_list[key]["amount"] - reformat_order_list[key]["amount"]
+            reformat_origin_list[key]["amount"] -
+            reformat_order_list[key]["amount"]
         )
         subtracted_item_list[key]["price"] = reformat_order_list[key]["price"]
     return subtracted_item_list
@@ -170,8 +176,10 @@ def create_updated_item_message(machine_id, updated_item_list):
     message["items"]["M"] = dict()
     for name, value in updated_item_list.items():
         message["items"]["M"][str(name)] = {"M": dict()}
-        message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
-        message["items"]["M"][str(name)]["M"]["amount"] = {"N": str(value["amount"])}
+        message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
+        message["items"]["M"][str(name)]["M"]["amount"] = {
+            "N": str(value["amount"])}
     return message
 
 
@@ -187,7 +195,8 @@ def update_item_list_to_database(updated_item_message):
 def update_item_list_in_database(machine_id, order_list):
     origin_item_list = get_origin_item_list(machine_id)
     updated_item_list = subtract_from_order_list(origin_item_list, order_list)
-    updated_item_message = create_updated_item_message(machine_id, updated_item_list)
+    updated_item_message = create_updated_item_message(
+        machine_id, updated_item_list)
     update_item_list_to_database(updated_item_message)
 
 
@@ -205,11 +214,18 @@ machine_id = get_machine_id()
 
 # send message to
 if response == "00":
-    order_list = get_order_from_database_based_on_key()
-    message = create_release_message(machine_id, order_list)
-    lambda_response = send_request_to_vending_machine_id(machine_id, message)
-    if lambda_response.status_code == 200:
-        update_item_list_in_database(machine_id, order_list)
+    release_control = ReleaseControl(get_order_key())
+    if release_control.is_order_not_released():
+        order_list = get_order_from_database_based_on_key()
+        message = create_release_message(machine_id, order_list)
+        lambda_response = send_request_to_vending_machine_id(
+            machine_id, message)
+        if lambda_response.status_code == 200:
+            update_item_list_in_database(machine_id, order_list)
+            release_control.update_order_release_status()
+    else:
+        st.write("Bú một lần thôi. Bú lắm thế")
+
 
 # update access lock to release lock
 access_control = AccessControl(machine_id)
