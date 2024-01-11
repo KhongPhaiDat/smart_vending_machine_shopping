@@ -48,8 +48,8 @@ def show_items(name_item, info_item):
             st.image("images/unknown.jpg", use_column_width=True)
 
     with col2:
-        st.write(f"Price: {info_item["price"]}")
-        st.write(f"Quantity remaining: {info_item["amount"]}")
+        st.write(f"Price: {info_item['price']}")
+        st.write(f"Quantity remaining: {info_item['amount']}")
         # Assuming the circles are for quantity selection
         quantity = get_new_quantity(name_item)
 
