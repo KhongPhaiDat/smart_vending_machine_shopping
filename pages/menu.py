@@ -72,7 +72,11 @@ def show_total_price():
 # Go to payment page
 def confirm():
     if st.button("Go to Purchase"):
-        switch_page("payment_page")
+        total_price = calculate_total_price()
+        if total_price == 0:
+            st.warning("Vui lòng hãy chọn mặt hàng để thanh toán!")
+        else:
+            switch_page("payment_page")
 
 
 # Initialize date time
