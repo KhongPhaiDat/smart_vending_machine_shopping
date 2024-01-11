@@ -61,6 +61,7 @@ def return_status(error):
         "11": "Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.",
         "12": "Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.",
         "13": "Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.",
+        "15": "Lỗi gì đó chưa biết! Nếu gặp thì phản hồi cho bên phát triển phần mềm!",
         "24": "Giao dịch không thành công do: Khách hàng hủy giao dịch",
         "51": "Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.",
         "65": "Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.",
