@@ -1,5 +1,7 @@
+from decimal import Decimal
 import streamlit as st
 import pages.payment_page as payment_page
+import modules.menu_component as menu_component
 import boto3
 import requests
 import json
@@ -44,7 +46,6 @@ def add_to_database(message, response):
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
 
-    # st.write("Djt me FPT")
     response = dynamoDB_client.put_item(Item=message, TableName="order_history")
     # st.write(response)
     return response
@@ -103,7 +104,7 @@ add_to_database(order_message, response)
 
 # get order list from database based on order key
 order_response = get_order_from_database_based_on_key()
-st.write(order_response)
+# st.write(order_response)
 
 
 # get machine id
@@ -153,11 +154,92 @@ def send_request_to_vending_machine_id(machine_id, message):
     return response
 
 
+# get origin
+def get_origin_item_list(machine_id):
+    menu = menu_component.MenuComponent()
+    origin_item_list = menu.queryMenuByMachineIDFromDatabase(machine_id)
+    return origin_item_list
+
+
+def order_list_to_dict(order_list):
+    items = dict()
+    for item_name, value in order_list.items():
+        items[item_name] = {
+            "amount": int(value["quantity"]),
+            "price": int(value["price"]),
+        }
+    return items
+
+
+def orgin_item_list_to_dict(origin_item_list):
+    items = dict()
+    for item_name, value in origin_item_list["items"].items():
+        items[item_name] = {
+            "amount": int(value["amount"]),
+            "price": int(value["price"]),
+        }
+    return items
+
+
+def subtract_from_order_list(origin_item_list, order_list):
+    reformat_order_list = order_list_to_dict(order_list)
+    reformat_origin_list = orgin_item_list_to_dict(origin_item_list)
+
+    subtracted_item_list = dict()
+    for key in reformat_order_list.keys():
+        subtracted_item_list[key]["amount"] = (
+            reformat_origin_list[key]["amount"] - reformat_order_list[key]["amount"]
+        )
+        subtracted_item_list[key]["price"] = reformat_order_list[key]["price"]
+
+    return subtracted_item_list
+
+
+def create_updated_item_message(machine_id, updated_item_list):
+    message = {"id": {"S": str(machine_id)}}
+
+    message["items"] = {"M": dict()}
+    message["items"]["M"] = dict()
+
+    for name, value in updated_item_list.items():
+        message["items"]["M"][str(name)] = {"M": dict()}
+        message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
+        message["items"]["M"][str(name)]["M"]["amount"] = {"N": str(value["amount"])}
+
+    return message
+
+
+def update_item_list_to_database(updated_item_message):
+    dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
+
+    response = dynamoDB_client.put_item(
+        Item=updated_item_message, TableName="order_history"
+    )
+
+    return response
+
+
+# update item list in database
+def update_item_list_in_database(machine_id, order_list):
+    origin_item_list = get_origin_item_list(machine_id)
+    st.write("Origin list:", origin_item_list)
+    updated_item_list = subtract_from_order_list(origin_item_list, order_list)
+    st.write("UPDATED list: ", updated_item_list)
+    updated_item_message = create_updated_item_message(machine_id, updated_item_list)
+    update_item_list_to_database(updated_item_message)
+
+
 # send message to
 if response == "00":
     machine_id = get_machine_id()
     order_list = get_order_from_database_based_on_key()
+
+    st.write("Order list: ", order_list)
+
     message = create_release_message(machine_id, order_list)
     lambda_response = send_request_to_vending_machine_id(machine_id, message)
+    st.write("lambda response: ", lambda_response)
 
-    st.write(lambda_response.text)
+    if lambda_response.status_code == 200:
+        st.write("DANG VIET VAO DATABASE")
+        update_item_list_in_database(machine_id, order_list)

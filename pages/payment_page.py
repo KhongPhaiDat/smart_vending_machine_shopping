@@ -59,8 +59,8 @@ def prepare_data(status):
     vnp_Locale = "vn"
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {menu.machine_info['id']}"
     vnp_OrderType = "other"
-    vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    # vnp_ReturnUrl = "http://localhost:8501/checkout"
+    # vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
+    vnp_ReturnUrl = "http://localhost:8501/checkout"
 
     if status == 0:
         menu.date_time = datetime.now(timezone).strftime("%Y%m%d%H%M%S")
@@ -94,8 +94,7 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" +
-                urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -167,8 +166,7 @@ def collect_order_info():
         "total_price"
     ] = menu.calculate_total_price()
 
-    message[str(globalRequestData["vnp_TxnRef"])
-            ]["transaction_status_code"] = ""
+    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
     return message
 
 
