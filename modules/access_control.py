@@ -8,8 +8,9 @@ NO_ACCESS = 2
 
 
 class AccessControl:
-    def __init__(self, machine_id, session_id) -> None:
-        self.dyn_resource = boto3.resource("dynamodb", region_name="ap-northeast-1")
+    def __init__(self, machine_id, session_id="") -> None:
+        self.dyn_resource = boto3.resource(
+            "dynamodb", region_name="ap-northeast-1")
         self.table = self.dyn_resource.Table("Access_lock")
         self.machine_id = machine_id
         self.session_id = session_id
@@ -66,6 +67,18 @@ class AccessControl:
                 "machine_id": self.machine_id,
                 "thoi_gian": timestamp,
                 "trang_thai": "active",
+                "session_id": self.session_id,
+            }
+        )
+
+    def end_user_session(self):
+        """Kết thúc một phiên người dùng."""
+        timestamp = datetime.now(self.timezone).strftime("%Y-%m-%d %H:%M:%S")
+        self.table.put_item(
+            Item={
+                "machine_id": self.machine_id,
+                "thoi_gian": timestamp,
+                "trang_thai": "inactive",
                 "session_id": self.session_id,
             }
         )
