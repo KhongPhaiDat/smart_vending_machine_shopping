@@ -185,8 +185,15 @@ def subtract_from_order_list(origin_item_list, order_list):
     reformat_order_list = order_list_to_dict(order_list)
     reformat_origin_list = orgin_item_list_to_dict(origin_item_list)
 
+    st.write("reformat_order_list: ", reformat_order_list)
+    st.write("reformat_origin_list: ", reformat_origin_list)
+
     subtracted_item_list = dict()
     for key in reformat_order_list.keys():
+        st.write("key: ", key)
+
+        subtracted_item_list[key] = dict()
+
         subtracted_item_list[key]["amount"] = (
             reformat_origin_list[key]["amount"] - reformat_order_list[key]["amount"]
         )
@@ -213,7 +220,7 @@ def update_item_list_to_database(updated_item_message):
     dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
 
     response = dynamoDB_client.put_item(
-        Item=updated_item_message, TableName="order_history"
+        TableName="Menu_database", Item=updated_item_message
     )
 
     return response
@@ -222,10 +229,11 @@ def update_item_list_to_database(updated_item_message):
 # update item list in database
 def update_item_list_in_database(machine_id, order_list):
     origin_item_list = get_origin_item_list(machine_id)
-    st.write("Origin list:", origin_item_list)
+    # st.write("Origin list:", origin_item_list)
     updated_item_list = subtract_from_order_list(origin_item_list, order_list)
-    st.write("UPDATED list: ", updated_item_list)
+    # st.write("UPDATED list: ", updated_item_list)
     updated_item_message = create_updated_item_message(machine_id, updated_item_list)
+    # st.write("Updated item message: ", updated_item_message)
     update_item_list_to_database(updated_item_message)
 
 
