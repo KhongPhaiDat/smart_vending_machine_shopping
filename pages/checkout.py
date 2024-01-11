@@ -1,4 +1,5 @@
 from decimal import Decimal
+from modules.access_control import AccessControl
 import streamlit as st
 import pages.payment_page as payment_page
 import modules.menu_component as menu_component
@@ -19,18 +20,21 @@ def reformat_message(message):
 
     new_message = {"order": {"S": str(key)}}
 
-    new_message["vending_machine_id"] = {"S": message[str(key)]["vending_machine_id"]}
+    new_message["vending_machine_id"] = {
+        "S": message[str(key)]["vending_machine_id"]}
 
     new_message["items"] = {"M": dict()}
     new_message["items"]["M"] = dict()
 
     for name, value in message[key]["items"].items():
         new_message["items"]["M"][str(name)] = {"M": dict()}
-        new_message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
+        new_message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
         new_message["items"]["M"][str(name)]["M"]["quantity"] = {
             "N": str(value["quantity"])
         }
-        new_message["items"]["M"][str(name)]["M"]["cost"] = {"N": str(value["cost"])}
+        new_message["items"]["M"][str(name)]["M"]["cost"] = {
+            "N": str(value["cost"])}
     new_message["total_price"] = {"N": str(message[key]["total_price"])}
     new_message["transaction_status_code"] = {
         "S": str(message[key]["transaction_status_code"])
@@ -46,7 +50,8 @@ def add_to_database(message, response):
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
 
-    response = dynamoDB_client.put_item(Item=message, TableName="order_history")
+    response = dynamoDB_client.put_item(
+        Item=message, TableName="order_history")
     # st.write(response)
     return response
 
@@ -199,7 +204,8 @@ def subtract_from_order_list(origin_item_list, order_list):
         subtracted_item_list[key] = dict()
 
         subtracted_item_list[key]["amount"] = (
-            reformat_origin_list[key]["amount"] - reformat_order_list[key]["amount"]
+            reformat_origin_list[key]["amount"] -
+            reformat_order_list[key]["amount"]
         )
         subtracted_item_list[key]["price"] = reformat_order_list[key]["price"]
 
@@ -214,8 +220,10 @@ def create_updated_item_message(machine_id, updated_item_list):
 
     for name, value in updated_item_list.items():
         message["items"]["M"][str(name)] = {"M": dict()}
-        message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
-        message["items"]["M"][str(name)]["M"]["amount"] = {"N": str(value["amount"])}
+        message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
+        message["items"]["M"][str(name)]["M"]["amount"] = {
+            "N": str(value["amount"])}
 
     return message
 
@@ -236,14 +244,16 @@ def update_item_list_in_database(machine_id, order_list):
     # st.write("Origin list:", origin_item_list)
     updated_item_list = subtract_from_order_list(origin_item_list, order_list)
     # st.write("UPDATED list: ", updated_item_list)
-    updated_item_message = create_updated_item_message(machine_id, updated_item_list)
+    updated_item_message = create_updated_item_message(
+        machine_id, updated_item_list)
     # st.write("Updated item message: ", updated_item_message)
     update_item_list_to_database(updated_item_message)
 
 
+machine_id = get_machine_id()
+
 # send message to
 if response == "00":
-    machine_id = get_machine_id()
     order_list = get_order_from_database_based_on_key()
 
     # st.write("Order list: ", order_list)
@@ -255,3 +265,7 @@ if response == "00":
     if lambda_response.status_code == 200:
         st.write("DANG VIET VAO DATABASE")
         update_item_list_in_database(machine_id, order_list)
+
+# update access lock to release lock
+access_control = AccessControl.AccessControl(machine_id)
+access_control.end_user_session()
