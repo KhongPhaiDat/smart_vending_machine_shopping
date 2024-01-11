@@ -100,6 +100,9 @@ return_status(response)
 
 # push order to database to  "order_history" database
 order_message = payment_page.collect_order_info()
+
+# st.write("order_message: ", order_message)
+
 add_to_database(order_message, response)
 
 # get order list from database based on order key
@@ -185,12 +188,12 @@ def subtract_from_order_list(origin_item_list, order_list):
     reformat_order_list = order_list_to_dict(order_list)
     reformat_origin_list = orgin_item_list_to_dict(origin_item_list)
 
-    st.write("reformat_order_list: ", reformat_order_list)
-    st.write("reformat_origin_list: ", reformat_origin_list)
+    # st.write("reformat_order_list: ", reformat_order_list)
+    # st.write("reformat_origin_list: ", reformat_origin_list)
 
     subtracted_item_list = dict()
     for key in reformat_order_list.keys():
-        st.write("key: ", key)
+        # st.write("key: ", key)
 
         subtracted_item_list[key] = dict()
 
@@ -242,11 +245,11 @@ if response == "00":
     machine_id = get_machine_id()
     order_list = get_order_from_database_based_on_key()
 
-    st.write("Order list: ", order_list)
+    # st.write("Order list: ", order_list)
 
     message = create_release_message(machine_id, order_list)
     lambda_response = send_request_to_vending_machine_id(machine_id, message)
-    st.write("lambda response: ", lambda_response)
+    # st.write("lambda response: ", lambda_response)
 
     if lambda_response.status_code == 200:
         st.write("DANG VIET VAO DATABASE")

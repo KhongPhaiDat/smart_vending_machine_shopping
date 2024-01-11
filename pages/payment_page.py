@@ -8,11 +8,15 @@ import urllib.parse
 from streamlit.components.v1 import html
 import time
 from zoneinfo import ZoneInfo
+from decimal import Decimal
 
 
 secret_key = "NRVNGGEOFCMRHZCLIRCUBYILIGPDRQKF"
 
 timezone = ZoneInfo("Asia/Ho_Chi_Minh")
+
+# st.write("item_new_quantity", menu.item_new_quantity)
+# st.write("machine_info: ", menu.machine_info)
 
 
 def open_page(url):
@@ -141,8 +145,14 @@ def collect_order_info():
 
     message[str(globalRequestData["vnp_TxnRef"])] = dict()
 
-    # machine_info
+    # Get updated machine_info
     machine_info = menu.machine_info
+
+    # Update quantity from user
+    for item_name, value in menu.item_new_quantity.items():
+        machine_info["items"][item_name]["amount"] = Decimal(value)
+
+    # st.write("Updated machine info:", machine_info)
 
     # menu.machine_info['id'] is the id of vending machine
     message[str(globalRequestData["vnp_TxnRef"])]["vending_machine_id"] = machine_info[
