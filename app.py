@@ -30,7 +30,7 @@ if "session_id" not in st.session_state:
     st.session_state["session_id"] = str(uuid.uuid4())
 
 try:
-    machine_id = st.experimental_get_query_params()["id"][0]
+    machine_id = st.query_params["id"]
     if "machine_id" not in st.session_state:
         st.session_state["machine_id"] = machine_id
 except:

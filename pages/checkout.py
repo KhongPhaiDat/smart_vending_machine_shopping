@@ -76,7 +76,7 @@ def return_status(error):
 
 # get order_key after checking out successfully
 def get_order_key():
-    order_key = st.experimental_get_query_params()["vnp_TxnRef"][0]
+    order_key = st.query_params["vnp_TxnRef"]
     return order_key
 
 
@@ -201,7 +201,7 @@ def update_item_list_in_database(machine_id, order_list):
 
 
 # return response
-response = st.experimental_get_query_params()["vnp_ResponseCode"][0]
+response = st.query_params["vnp_ResponseCode"]
 return_status(response)
 
 # push order to database to  "order_history" database

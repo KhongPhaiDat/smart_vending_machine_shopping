@@ -84,7 +84,7 @@ date_time = ""
 
 # Init menu component
 menu_component = menu_component.MenuComponent()
-id = st.experimental_get_query_params()["id"][0]
+id = st.query_params["id"]
 
 # Get machine info base on ID
 machine_info = menu_component.returnMenuByMachineID(id=id)

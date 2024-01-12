@@ -90,7 +90,8 @@ def create_order():
     for key, val in inputData:
         if seq == 1:
             queryString = (
-                queryString + "&" + key + "=" + urllib.parse.quote_plus(str(val))
+                queryString + "&" + key + "=" +
+                urllib.parse.quote_plus(str(val))
             )
         else:
             seq = 1
@@ -140,7 +141,8 @@ def collect_order_info():
     message[str(globalRequestData["vnp_TxnRef"])][
         "total_price"
     ] = menu.calculate_total_price()
-    message[str(globalRequestData["vnp_TxnRef"])]["transaction_status_code"] = ""
+    message[str(globalRequestData["vnp_TxnRef"])
+            ]["transaction_status_code"] = ""
     return message
 
 
@@ -153,7 +155,7 @@ def show_pay_button():
         if chosen_method == "VN Pay":
             url = create_order()
             open_page(url)
-            time.sleep(5)
+            time.sleep(2)
             switch_page("hidden_page")
         elif chosen_method == "Vui lòng chọn":
             st.write("Hãy chọn phương thức thanh toán")
