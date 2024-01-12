@@ -260,7 +260,7 @@ resource "aws_iam_role" "ec2_dynamodb" {
             "dynamodb:PutItem"
           ],
           "Effect" : "Allow",
-          "Resource" : ["${aws_dynamodb_table.menu_database.arn}", "${aws_dynamodb_table.access_lock_database.arn}", "${aws_dynamodb_table.order_history.arn}"]
+          "Resource" : ["${aws_dynamodb_table.menu_database.arn}", "${aws_dynamodb_table.access_lock_database.arn}", "${aws_dynamodb_table.order_history.arn}", "${aws_dynamodb_table.release_control.arn}"]
         }
       ]
     })
