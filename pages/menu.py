@@ -5,7 +5,7 @@ from streamlit_extras.switch_page_button import switch_page
 
 # Main structure of menu page
 def main():
-    st.title("Smart Vending Shopping")
+    st.title("Smart Vending Machine Shopping")
     for item in machine_info["items"].keys():
         item_new_quantity[item] = machine_info["items"][item]["amount"]
     # User input new quantity
