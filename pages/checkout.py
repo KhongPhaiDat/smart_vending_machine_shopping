@@ -111,6 +111,10 @@ def get_url_dictionary():
         "ua3dXFyQwMSMzvzEC"
     ] = "https://ozkhtpzc54m7jzgngyw4ent5cu0fojgr.lambda-url.ap-northeast-1.on.aws/"
 
+    vending_URL_repository[
+        "123456"
+    ] = "https://ozkhtpzc54m7jzgngyw4ent5cu0fojgr.lambda-url.ap-northeast-1.on.aws/"
+
     return vending_URL_repository
 
 
