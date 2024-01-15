@@ -94,20 +94,20 @@ resource "aws_dynamodb_table_item" "example" {
       "bento": {
         "M": {
           "amount": {
-            "N": "10"
+            "N": "15"
           },
           "price": {
-            "N": "10000"
+            "N": "30000"
           }
         }
       },
       "chocolate": {
         "M": {
           "amount": {
-            "N": "10"
+            "N": "12"
           },
           "price": {
-            "N": "10000"
+            "N": "5000"
           }
         }
       },
@@ -117,7 +117,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10000"
+            "N": "15000"
           }
         }
       },
@@ -127,17 +127,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "dat": {
-        "M": {
-          "amount": {
-            "N": "0"
-          },
-          "price": {
-            "N": "0"
+            "N": "20000"
           }
         }
       }

@@ -31,9 +31,9 @@ def show_items(name_item, info_item, item_new_quantity, machine_info):
     col1, col2 = st.columns([1, 2])
     with col1:
         try:
-            st.image(f"images/{name_item}.jpg", use_column_width=True)
+            st.image(f"static/{name_item}.jpg", use_column_width=True)
         except:
-            st.image("images/unknown.jpg", use_column_width=True)
+            st.image("static/unknown.jpg", use_column_width=True)
     with col2:
         st.write(f"Price: {info_item['price']}")
         st.write(f"Quantity remaining: {info_item['amount']}")
