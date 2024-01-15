@@ -216,6 +216,28 @@ def add_transaction_status_to_order(order_data, transaction_status):
     return order_data
 
 
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+<style>
+    [data-testid="baseButton-headerNoPadding"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 # print transaction status
 return_status(get_transaction_status())
 

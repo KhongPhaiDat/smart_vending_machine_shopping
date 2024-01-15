@@ -219,6 +219,27 @@ def write_order_to_tmp_database():
 
 
 def main():
+    st.markdown(
+        """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+        unsafe_allow_html=True,
+    )
+
+    st.markdown(
+        """
+<style>
+    [data-testid="baseButton-headerNoPadding"] {
+        display: none
+    }
+</style>
+""",
+        unsafe_allow_html=True,
+    )
     if "session_id" not in st.session_state:
         st.write(
             "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
