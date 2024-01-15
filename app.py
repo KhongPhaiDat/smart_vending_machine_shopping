@@ -43,10 +43,8 @@ def main():
         )
     elif access_decision == NEW_ACCESS:
         access_control.start_user_session()
-        st.write("Bạn đang mua hàng tại máy số: ", machine_id)
         menu.main()
     elif access_decision == CONTINUE_ACCESS:
-        st.write("Bạn đang mua hàng tại máy số: ", machine_id)
         menu.main()
 
 
