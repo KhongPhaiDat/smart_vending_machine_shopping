@@ -45,7 +45,7 @@ def show_total_price():
     )
 
 
-payment_methods = ["Vui lòng chọn", "VN Pay"]
+payment_methods = ["Please select payment method", "VNPay"]
 
 
 # Show payment method
@@ -75,8 +75,8 @@ def prepare_data(status):
     vnp_Locale = "vn"
     vnp_OrderInfo = f"Đơn hàng tạo bởi máy {get_machine_info()['id']}"
     vnp_OrderType = "other"
-    vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
-    # vnp_ReturnUrl = "http://localhost:8501/checkout"
+    # vnp_ReturnUrl = "https://svm.datluyendevops.online/checkout"
+    vnp_ReturnUrl = "http://localhost:8501/checkout"
 
     if status == 0:
         menu.date_time = datetime.now(timezone).strftime("%Y%m%d%H%M%S")
@@ -163,18 +163,17 @@ def collect_order_info():
 
 # Show pay button
 def show_pay_button():
-    st.warning("Please choose your payment method!")
-    st.warning("If you want to cancel, please press CANCEL button below!")
+    st.warning("If you want to cancel purchase, please press CANCEL button below!")
     chosen_method = show_payment_method()
     if st.button("Pay"):
         write_order_to_tmp_database()
-        if chosen_method == "VN Pay":
+        if chosen_method == "VNPay":
             url = create_order()
             open_page(url)
             time.sleep(2)
             switch_page("hidden_page")
-        elif chosen_method == "Vui lòng chọn":
-            st.write("Hãy chọn phương thức thanh toán")
+        elif chosen_method == "Please select payment method":
+            st.write("Please choose a payment method!")
 
 
 # Show cancel button
@@ -245,7 +244,7 @@ def main():
     )
     if "session_id" not in st.session_state:
         st.write(
-            "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+            "You are accessing this page in an invalid way. Please scan the QR code and try again!!!"
         )
     else:
         show_total_price()

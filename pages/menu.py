@@ -86,7 +86,7 @@ def confirm(machine_info, item_new_quantity):
     if st.button("Go to Purchase"):
         total_price = calculate_total_price(machine_info, item_new_quantity)
         if total_price == 0:
-            st.warning("Vui lòng hãy chọn mặt hàng để thanh toán!")
+            st.warning("Please select items for payment!")
         else:
             if "item_new_quantity" not in st.session_state:
                 st.session_state["item_new_quantity"] = item_new_quantity
