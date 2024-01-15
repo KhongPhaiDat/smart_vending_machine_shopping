@@ -25,7 +25,7 @@ st.markdown(
 
 if "session_id" not in st.session_state and "machine_id" not in st.session_state:
     st.write(
-        "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+        "You are accessing this page in an invalid way. Please scan the QR code and try again!!!"
     )
 else:
     machine_id = st.session_state["machine_id"]
