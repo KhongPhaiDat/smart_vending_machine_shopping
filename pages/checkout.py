@@ -260,6 +260,7 @@ if get_transaction_status() == "00":
         message = create_release_message(machine_id, order_list)
         lambda_response = send_request_to_vending_machine_id(machine_id, message)
         if lambda_response.status_code == 200:
+            st.write("Mời quý khách nhận hàng!")
             update_item_list_in_database(machine_id, order_list)
             release_control.update_order_release_status()
     else:
