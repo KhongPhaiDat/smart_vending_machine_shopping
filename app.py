@@ -10,6 +10,30 @@ NEW_ACCESS = 0
 CONTINUE_ACCESS = 1
 NO_ACCESS = 2
 
+st.set_page_config(initial_sidebar_state="collapsed")
+
+st.markdown(
+    """
+<style>
+    [data-testid="collapsedControl"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    """
+<style>
+    [data-testid="baseButton-headerNoPadding"] {
+        display: none
+    }
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 
 def main():
     access_decision = access_control.get_access_info()
