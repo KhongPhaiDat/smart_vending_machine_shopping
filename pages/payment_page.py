@@ -36,9 +36,12 @@ def open_page(url):
 
 # Show total price
 def show_total_price():
-    st.write(
-        "Total Price: ",
-        menu.calculate_total_price(get_machine_info(), get_item_new_quantity()),
+    total_price = menu.calculate_total_price(
+        get_machine_info(), get_item_new_quantity()
+    )
+    custom_text = f"Total Price: {total_price}"
+    st.markdown(
+        f'<p style="font-size: 24px;">{custom_text}</p>', unsafe_allow_html=True
     )
 
 
