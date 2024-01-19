@@ -1,14 +1,17 @@
 provider "aws" {
   region = "ap-northeast-1"
+  assume_role {
+    role_arn = "arn:aws:iam::130534409058:role/admin_admin"
+  }
 }
 
 # Init storage for tfstate file for multilple devs working
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-storage-svm-dev"
+    bucket         = "terraform-state-storage-svm"
     key            = "smart-vending-machine/terraform.tfstate"
     region         = "ap-northeast-1"
-    dynamodb_table = "terraform-lock-state"
+    dynamodb_table = "terraform-lock-state-svm"
     encrypt        = true
   }
 }
