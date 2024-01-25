@@ -289,8 +289,6 @@ if get_transaction_status() == "00":
             st.write("Please collect your items!")
             update_item_list_in_database(machine_id, order_list)
             release_control.update_order_release_status()
-            st.write(
-                "Xuất hàng thành công! Nếu có sự cố, vui lòng liên hệ nhân viên!!!")
         else:
             st.write(lambda_response)
     else:
