@@ -1,3 +1,6 @@
+from decimal import Decimal
+import json
+from time import sleep
 from modules.access_control import AccessControl
 from modules.release_control import ReleaseControl
 import streamlit as st
@@ -23,11 +26,13 @@ def reformat_message(message):
     new_message["items"]["M"] = dict()
     for name, value in message["items"].items():
         new_message["items"]["M"][str(name)] = {"M": dict()}
-        new_message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
+        new_message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
         new_message["items"]["M"][str(name)]["M"]["quantity"] = {
             "N": str(value["quantity"])
         }
-        new_message["items"]["M"][str(name)]["M"]["cost"] = {"N": str(value["cost"])}
+        new_message["items"]["M"][str(name)]["M"]["cost"] = {
+            "N": str(value["cost"])}
     new_message["total_price"] = {"N": str(message["total_price"])}
     new_message["transaction_status_code"] = {
         "S": str(message["transaction_status_code"])
@@ -41,7 +46,8 @@ def add_to_database(message, response):
     dynamoDB_client = boto3.client("dynamodb", region_name="ap-northeast-1")
     message = reformat_message(message)
     message["transaction_status_code"] = {"S": str(response)}
-    response = dynamoDB_client.put_item(Item=message, TableName="order_history")
+    response = dynamoDB_client.put_item(
+        Item=message, TableName="order_history")
     return response
 
 
@@ -97,9 +103,23 @@ def get_machine_id():
     return machine_id
 
 
+def decimal2int(message):
+    new_message = dict()
+    for key, value in message.items():
+        if isinstance(value, dict):
+            new_message[key] = decimal2int(value)
+        elif isinstance(value, Decimal):
+            new_message[key] = int(value)
+        else:
+            new_message[key] = value
+    return new_message
+
 # create release message
+
+
 def create_release_message(machine_id, order_list):
     message = dict()
+    order_list = decimal2int(message=order_list)
     message = {"machine_id": machine_id, "order_list": order_list}
     return message
 
@@ -109,7 +129,7 @@ def get_url_dictionary():
     vending_URL_repository = dict()
     vending_URL_repository[
         "ua3dXFyQwMSMzvzEC"
-    ] = "https://ozkhtpzc54m7jzgngyw4ent5cu0fojgr.lambda-url.ap-northeast-1.on.aws/"
+    ] = "https://dhry3vb4qmez3g7dgzb6gvdtte0bsipr.lambda-url.ap-southeast-1.on.aws/"
 
     vending_URL_repository[
         "123456"
@@ -127,7 +147,7 @@ def mapping_machine_to_lambda_URL(machine_id):
 # send request to vending machine id
 def send_request_to_vending_machine_id(machine_id, message):
     lambda_url = mapping_machine_to_lambda_URL(machine_id)
-    response = requests.post(lambda_url, data=message)
+    response = requests.post(lambda_url, json=message)
     return response
 
 
@@ -165,7 +185,8 @@ def subtract_from_order_list(origin_item_list, order_list):
     for key in reformat_order_list.keys():
         subtracted_item_list[key] = dict()
         subtracted_item_list[key]["amount"] = (
-            reformat_origin_list[key]["amount"] - reformat_order_list[key]["amount"]
+            reformat_origin_list[key]["amount"] -
+            reformat_order_list[key]["amount"]
         )
         subtracted_item_list[key]["price"] = reformat_order_list[key]["price"]
     return subtracted_item_list
@@ -177,8 +198,10 @@ def create_updated_item_message(machine_id, updated_item_list):
     message["items"]["M"] = dict()
     for name, value in updated_item_list.items():
         message["items"]["M"][str(name)] = {"M": dict()}
-        message["items"]["M"][str(name)]["M"]["price"] = {"N": str(value["price"])}
-        message["items"]["M"][str(name)]["M"]["amount"] = {"N": str(value["amount"])}
+        message["items"]["M"][str(name)]["M"]["price"] = {
+            "N": str(value["price"])}
+        message["items"]["M"][str(name)]["M"]["amount"] = {
+            "N": str(value["amount"])}
     return message
 
 
@@ -194,7 +217,8 @@ def update_item_list_to_database(updated_item_message):
 def update_item_list_in_database(machine_id, order_list):
     origin_item_list = get_origin_item_list(machine_id)
     updated_item_list = subtract_from_order_list(origin_item_list, order_list)
-    updated_item_message = create_updated_item_message(machine_id, updated_item_list)
+    updated_item_message = create_updated_item_message(
+        machine_id, updated_item_list)
     update_item_list_to_database(updated_item_message)
 
 
@@ -258,10 +282,16 @@ if get_transaction_status() == "00":
     if release_control.is_order_not_released():
         order_list = get_order_from_database_based_on_key()
         message = create_release_message(machine_id, order_list)
-        lambda_response = send_request_to_vending_machine_id(machine_id, message)
+        lambda_response = send_request_to_vending_machine_id(
+            machine_id, message)
+
         if lambda_response.status_code == 200:
             update_item_list_in_database(machine_id, order_list)
             release_control.update_order_release_status()
+            st.write(
+                "Xuất hàng thành công! Nếu có sự cố, vui lòng liên hệ nhân viên!!!")
+        else:
+            st.write(lambda_response)
     else:
         st.write("Bú một lần thôi. Bú lắm thế")
 
