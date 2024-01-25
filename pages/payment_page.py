@@ -36,13 +36,16 @@ def open_page(url):
 
 # Show total price
 def show_total_price():
-    st.write(
-        "Total Price: ",
-        menu.calculate_total_price(get_machine_info(), get_item_new_quantity()),
+    total_price = menu.calculate_total_price(
+        get_machine_info(), get_item_new_quantity()
+    )
+    custom_text = f"Total Price: {total_price}"
+    st.markdown(
+        f'<p style="font-size: 24px;">{custom_text}</p>', unsafe_allow_html=True
     )
 
 
-payment_methods = ["Vui lòng chọn", "VN Pay"]
+payment_methods = ["Please select payment method", "VNPay"]
 
 
 # Show payment method
@@ -160,18 +163,17 @@ def collect_order_info():
 
 # Show pay button
 def show_pay_button():
-    st.warning("Please choose your payment method!")
-    st.warning("If you want to cancel, please press CANCEL button below!")
+    st.warning("If you want to cancel purchase, please press CANCEL button below!")
     chosen_method = show_payment_method()
     if st.button("Pay"):
         write_order_to_tmp_database()
-        if chosen_method == "VN Pay":
+        if chosen_method == "VNPay":
             url = create_order()
             open_page(url)
             time.sleep(2)
             switch_page("hidden_page")
-        elif chosen_method == "Vui lòng chọn":
-            st.write("Hãy chọn phương thức thanh toán")
+        elif chosen_method == "Please select payment method":
+            st.write("Please choose a payment method!")
 
 
 # Show cancel button
@@ -242,7 +244,7 @@ def main():
     )
     if "session_id" not in st.session_state:
         st.write(
-            "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+            "You are accessing this page in an invalid way. Please scan the QR code and try again!!!"
         )
     else:
         show_total_price()

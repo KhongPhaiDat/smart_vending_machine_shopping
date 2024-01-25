@@ -31,9 +31,9 @@ def show_items(name_item, info_item, item_new_quantity, machine_info):
     col1, col2 = st.columns([1, 2])
     with col1:
         try:
-            st.image(f"images/{name_item}.jpg", use_column_width=True)
+            st.image(f"static/{name_item}.jpg", width=150, use_column_width=False)
         except:
-            st.image("images/unknown.jpg", use_column_width=True)
+            st.image("static/unknown.jpg", width=150, use_column_width=False)
     with col2:
         st.write(f"Price: {info_item['price']}")
         st.write(f"Quantity remaining: {info_item['amount']}")
@@ -57,7 +57,6 @@ def get_new_quantity(name_item, machine_info):
 
 # User can input amount to buy
 def insert_amount_item(machine_info, item_new_quantity):
-    st.write("Here is the menu of vending machine")
     items = machine_info["items"]
     for item, info_item in items.items():
         show_items(item, info_item, item_new_quantity, machine_info)
@@ -76,7 +75,10 @@ def calculate_total_price(machine_info, item_new_quantity):
 # Show total price of shopping
 def show_total_price(machine_info, item_new_quantity):
     total_price = calculate_total_price(machine_info, item_new_quantity)
-    st.write("Total Price: ", total_price)
+    custom_text = f"Total Price: {total_price}"
+    st.markdown(
+        f'<p style="font-size: 24px;">{custom_text}</p>', unsafe_allow_html=True
+    )
 
 
 # Go to payment page
@@ -84,7 +86,7 @@ def confirm(machine_info, item_new_quantity):
     if st.button("Go to Purchase"):
         total_price = calculate_total_price(machine_info, item_new_quantity)
         if total_price == 0:
-            st.warning("Vui lòng hãy chọn mặt hàng để thanh toán!")
+            st.warning("Please select items for payment!")
         else:
             if "item_new_quantity" not in st.session_state:
                 st.session_state["item_new_quantity"] = item_new_quantity

@@ -39,14 +39,12 @@ def main():
     access_decision = access_control.get_access_info()
     if access_decision == NO_ACCESS:
         st.write(
-            "Máy đang được sử dụng bởi người dùng khác. Vui lòng đợi một lát nhé!!!"
+            "The machine is currently being used by another user. Please wait a moment!!!"
         )
     elif access_decision == NEW_ACCESS:
         access_control.start_user_session()
-        st.write("Bạn đang mua hàng tại máy số: ", machine_id)
         menu.main()
     elif access_decision == CONTINUE_ACCESS:
-        st.write("Bạn đang mua hàng tại máy số: ", machine_id)
         menu.main()
 
 
@@ -59,7 +57,7 @@ try:
         st.session_state["machine_id"] = machine_id
 except:
     st.write(
-        "Bạn đang truy cập vào trang này bằng một cách không hợp lệ. Vui lòng quét mã QR và thử lại!!!"
+        "You are accessing this page in an invalid way. Please scan the QR code and try again!!!"
     )
 
 if "machine_id" in st.session_state:

@@ -1,14 +1,17 @@
 provider "aws" {
   region = "ap-northeast-1"
+  assume_role {
+    role_arn = "arn:aws:iam::130534409058:role/admin_admin"
+  }
 }
 
 # Init storage for tfstate file for multilple devs working
 terraform {
   backend "s3" {
-    bucket         = "terraform-state-storage-svm-dev"
+    bucket         = "terraform-state-storage-svm"
     key            = "smart-vending-machine/terraform.tfstate"
     region         = "ap-northeast-1"
-    dynamodb_table = "terraform-lock-state"
+    dynamodb_table = "terraform-lock-state-svm"
     encrypt        = true
   }
 }
@@ -94,20 +97,20 @@ resource "aws_dynamodb_table_item" "example" {
       "bento": {
         "M": {
           "amount": {
-            "N": "10"
+            "N": "15"
           },
           "price": {
-            "N": "10000"
+            "N": "30000"
           }
         }
       },
       "chocolate": {
         "M": {
           "amount": {
-            "N": "10"
+            "N": "12"
           },
           "price": {
-            "N": "10000"
+            "N": "5000"
           }
         }
       },
@@ -117,7 +120,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10000"
+            "N": "15000"
           }
         }
       },
@@ -127,17 +130,7 @@ resource "aws_dynamodb_table_item" "example" {
             "N": "10"
           },
           "price": {
-            "N": "10000"
-          }
-        }
-      },
-      "dat": {
-        "M": {
-          "amount": {
-            "N": "0"
-          },
-          "price": {
-            "N": "0"
+            "N": "20000"
           }
         }
       }

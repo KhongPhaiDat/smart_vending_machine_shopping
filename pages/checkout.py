@@ -54,27 +54,27 @@ def add_to_database(message, response):
 # return status code
 def return_status(error):
     status = {
-        "00": "Giao dịch thành công",  # Successful transaction
-        "07": "Trừ tiền thành công. Giao dịch bị nghi ngờ (liên quan tới lừa đảo, giao dịch bất thường).",
-        "09": "Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng chưa đăng ký dịch vụ InternetBanking tại ngân hàng.",
-        "10": "Giao dịch không thành công do: Khách hàng xác thực thông tin thẻ/tài khoản không đúng quá 3 lần",
-        "11": "Giao dịch không thành công do: Đã hết hạn chờ thanh toán. Xin quý khách vui lòng thực hiện lại giao dịch.",
-        "12": "Giao dịch không thành công do: Thẻ/Tài khoản của khách hàng bị khóa.",
-        "13": "Giao dịch không thành công do Quý khách nhập sai mật khẩu xác thực giao dịch (OTP). Xin quý khách vui lòng thực hiện lại giao dịch.",
-        "15": "Lỗi gì đó chưa biết! Nếu gặp thì phản hồi cho bên phát triển phần mềm!",
-        "24": "Giao dịch không thành công do: Khách hàng hủy giao dịch",
-        "51": "Giao dịch không thành công do: Tài khoản của quý khách không đủ số dư để thực hiện giao dịch.",
-        "65": "Giao dịch không thành công do: Tài khoản của Quý khách đã vượt quá hạn mức giao dịch trong ngày.",
-        "75": "Ngân hàng thanh toán đang bảo trì.",
-        "79": "Giao dịch không thành công do: KH nhập sai mật khẩu thanh toán quá số lần quy định. Xin quý khách vui lòng thực hiện lại giao dịch",
-        "99": "Các lỗi khác (lỗi còn lại, không có trong danh sách mã lỗi đã liệt kê)",
+        "00": "Successful transaction.",
+        "07": "Money deducted successfully. Transaction suspected (related to fraud, unusual transaction).",
+        "09": "Transaction failed because: The customer's card/account is not registered for InternetBanking service at the bank.",
+        "10": "Transaction failed because: The customer has incorrectly verified card/account information more than 3 times.",
+        "11": "Transaction failed because: Payment waiting time has expired. Please redo the transaction.",
+        "12": "Transaction failed because: The customer's card/account is blocked.",
+        "13": "Transaction failed because the customer entered the wrong transaction verification password (OTP). Please redo the transaction.",
+        "15": "Unknown error! If encountered, please report to the software development team!",
+        "24": "Transaction failed because: Customer cancelled the transaction.",
+        "51": "Transaction failed because: The customer's account does not have sufficient balance to perform the transaction.",
+        "65": "Transaction failed because: The customer's account has exceeded the daily transaction limit.",
+        "75": "The payment bank is under maintenance.",
+        "79": "Transaction failed because: Customer entered the wrong payment password more times than allowed. Please redo the transaction.",
+        "99": "Other errors (remaining errors, not in the listed error codes).",
     }
 
-    error_solve = status.get(error, "Lỗi không xác định")
+    error_solve = status.get(error, "Undefined error.")
     if error == "00":
-        st.write("Giao dịch thành công! Vui lòng chờ lấy hàng")
+        st.write("Transaction successful! Please wait to collect your items.")
     else:
-        st.write("Giao dịch không thành công")
+        st.write("Transaction unsuccessful.")
         st.write(error_solve)
 
 
@@ -286,6 +286,7 @@ if get_transaction_status() == "00":
             machine_id, message)
 
         if lambda_response.status_code == 200:
+            st.write("Please collect your items!")
             update_item_list_in_database(machine_id, order_list)
             release_control.update_order_release_status()
             st.write(
@@ -293,7 +294,7 @@ if get_transaction_status() == "00":
         else:
             st.write(lambda_response)
     else:
-        st.write("Bú một lần thôi. Bú lắm thế")
+        st.write("Order has been completed!!")
 
 
 # update access lock to release lock
